@@ -1,10 +1,13 @@
-var express       =   require('express');
-var app           =   express();
-const bodyParser  =   require("body-parser");
-var PORT          =   8080;
+const express       =   require('express');
+const app           =   express();
+const bodyParser    =   require("body-parser");
+const cookieParser  =   require('cookie-parser');
+const PORT          =   8080;
+
 
 // ***********************************************************************
 
+app.use(cookieParser())
 app.use(bodyParser.urlencoded({extended: true}));
 app.set('view engine', 'ejs');
 
@@ -30,6 +33,17 @@ app.get('/', (req, res) => {
 });
 
 
+// LOGIN
+
+app.post('/login', (req, res) => {
+  let username = req.body.username
+  res.cookie('username', username)
+
+  console.log(res.cookie('username', username));
+  res.redirect('/urls');
+});
+
+
 // DATABASE URLS
 app.get('/urls', (req, res) => {
   let templateVars  = {urls: urlDatabase};
@@ -42,7 +56,7 @@ app.post('/urls', (req, res) => {
   let shortURL  = generateRandomString();
   let longURL   = req.body.longURL
   urlDatabase[shortURL] = longURL
-  res.redirect('/urls')
+  res.redirect('/urls');
 });
 
 
