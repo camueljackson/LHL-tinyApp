@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+  <% include ./partials/_header.ejs %>
+
+</head>
+<body>
+
+  <% for (let shortUrl in urls) { %>
+  <table style="width:50%">
+    <tr>
+      <th>Firstname - Shortened URL</th>
+      <th>Lastname - Long URL</th>
+    </tr>
+    <tr>
+      <td>Jill - <%= shortUrl %></td>
+      <td>Smith - <%= urls[shortUrl] %></td>
+    </tr>
+  </table>
+
+  <%}%>
+  <a href="urls/new">Shorten your URL </a>
+
+</body>
+</html>
