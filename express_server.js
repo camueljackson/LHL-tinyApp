@@ -19,15 +19,9 @@ function generateRandomString() {
 }
 
 
-// GREETING
-app.get('/hello', (req, res) => {
-  res.end('<html><body>Hello <b>World</b></body></html>\n');
-});
-
-
 // HOME
 app.get('/', (req, res) => {
-  res.end('Hello!');
+  res.render('home')
 });
 
 
