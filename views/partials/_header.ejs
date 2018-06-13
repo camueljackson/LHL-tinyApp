@@ -1,10 +1,34 @@
 
-  <head>
-    <title>TinyApp</title>
-  </head>
+<head>
+  <title>TinyApp</title>
+</head>
 
-  <body>
+<body>
+
+
+
+  <br>
+  <br>
+
+  <% if (!username) {%>
 
   <h4 id=greeting> Welcome to TinyApp </h4>
   <hr width='viewport'>
-  </body>
+  <form action="/login" method="POST">
+    <label for="longURL">Please log in:</label>
+    <input type="text" name="username" placeholder="username"> <br>
+    <input type="submit" value="Login">
+  </form>
+
+
+  <%} else {%>
+  <h1>Welcome back, <%=username%></h1>
+
+  <form action="/logout" method="POST">
+    <input type="submit" value="Logout" name='username'>
+  </form>
+
+
+  <% } %>
+
+</body>
