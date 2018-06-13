@@ -68,7 +68,13 @@ app.get('/urls/:id', (req, res) => {
 // REDIRECT TO LONG URL
 app.get("/u/:shortURL", (req, res) => {
   let longURL = urlDatabase[req.params.shortURL];
-  res.redirect(301 + longURL);
+  let redirect;
+  if (!longURL.includes('http')){
+    redirect = 'http://' + urlDatabase[req.params.shortURL];
+  } else {
+    redirect = urlDatabase[req.params.shortURL];
+  }
+  res.redirect(redirect);
 });
 
 
