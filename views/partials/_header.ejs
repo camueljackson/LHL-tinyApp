@@ -1,9 +1,16 @@
 
-  <head>
-    <title>TinyApp</title>
-  </head>
+<head>
+  <title>TinyApp</title>
+</head>
 
-  <body>
+<body>
+
+
+
+  <br>
+  <br>
+
+  <% if (!username) {%>
 
   <h4 id=greeting> Welcome to TinyApp </h4>
   <hr width='viewport'>
@@ -14,7 +21,9 @@
   </form>
 
 
-  <br>
-  <br>
+  <%} else {%>
+  <h1>Welcome back, <%=username%></h1>
 
-  </body>
+  <% } %>
+
+</body>

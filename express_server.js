@@ -27,12 +27,6 @@ function generateRandomString() {
 // ***********************************************************************
 
 
-// HOME
-app.get('/', (req, res) => {
-  res.render('home')
-});
-
-
 // LOGIN
 
 app.post('/login', (req, res) => {
@@ -42,6 +36,15 @@ app.post('/login', (req, res) => {
     username: req.cookies["username"]
   }
   res.redirect('/urls').render(templateVars)
+});
+
+
+// HOME
+app.get('/', (req, res) => {
+  let templateVars = {
+    username: req.cookies["username"]
+  }
+  res.render('home', templateVars)
 });
 
 
@@ -60,13 +63,16 @@ app.post('/urls', (req, res) => {
   let shortURL  = generateRandomString();
   let longURL   = req.body.longURL
   urlDatabase[shortURL] = longURL
-  res.redirect('/urls');
+  res.redirect('/urls').render(templateVars);
 });
 
 
 // NEW URLS
 app.get('/urls/new', (req, res) => {
-  res.render("urls_new");
+  let templateVars = {
+    username: req.cookies["username"]
+  }
+  res.render("urls_new", templateVars);
 });
 
 
@@ -75,7 +81,7 @@ app.post('/urls/:id', (req, res) => {
   let shortURL  = req.params.id;
   let longURL   = req.body.longURL;
   urlDatabase[shortURL] = longURL;
-  res.redirect('/urls')
+  res.redirect('/urls').render(templateVars)
 });
 
 
@@ -85,7 +91,9 @@ app.get('/urls/:id', (req, res) => {
   let longURL   =  urlDatabase[shortURL];
   let templateVars = {
     shortURL: shortURL,
-    longURL: longURL
+    longURL: longURL,
+    username: req.cookies["username"]
+
   };
   res.render('urls_show', templateVars);
 });
@@ -96,12 +104,15 @@ app.get('/u/:shortURL', (req, res) => {
   let shortURL  = req.params.id;
   let longURL   = urlDatabase[req.params.shortURL];
   let redirect;
+  let templateVars = {
+    username: req.cookies["username"]
+  }
   if (!longURL.includes('http')){
     redirect = 'http://' + urlDatabase[req.params.shortURL];
   } else {
     redirect = urlDatabase[req.params.shortURL];
   };
-  res.redirect(redirect);
+  res.redirect(redirect).render(templateVars)
 });
 
 
