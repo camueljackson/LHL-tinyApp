@@ -71,7 +71,7 @@ app.post('/urls', (req, res) => {
   let shortURL  = generateRandomString();
   let longURL   = req.body.longURL
   urlDatabase[shortURL] = longURL
-  res.redirect('/urls').render(templateVars);
+  res.redirect('/urls');
 });
 
 
@@ -89,7 +89,7 @@ app.post('/urls/:id', (req, res) => {
   let shortURL  = req.params.id;
   let longURL   = req.body.longURL;
   urlDatabase[shortURL] = longURL;
-  res.redirect('/urls').render(templateVars)
+  res.redirect('/urls');
 });
 
 
@@ -101,7 +101,6 @@ app.get('/urls/:id', (req, res) => {
     shortURL: shortURL,
     longURL: longURL,
     username: req.cookies["username"]
-
   };
   res.render('urls_show', templateVars);
 });
