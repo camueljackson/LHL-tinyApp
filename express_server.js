@@ -48,16 +48,32 @@ app.post('/urls', (req, res) => {
 });
 
 
+
+// UPDATE URL (SHOW)
+app.post('/urls/:id', (req, res) => {
+  let longURL = req.body.longURL;
+  let shortURL = req.params.id;
+  urlDatabase[shortURL] = longURL
+
+  console.log(longURL)
+
+  res.redirect('/urls')
+});
+
+
 // SHOW URL
 app.get('/urls/:id', (req, res) => {
   let shortURL = req.params.id;
-  let longURL =  urlDatabase[req.params.shortURL];
+  let longURL =  urlDatabase[shortURL];
   let templateVars = {
     shortURL: shortURL,
     longURL: longURL
   }
   res.render('urls_show', templateVars);
 });
+
+
+
 
 
 // REDIRECT TO LONG URL
@@ -81,6 +97,7 @@ app.post('/urls/:id/delete', (req, res) => {
   res.redirect('/urls')
 
 })
+
 
 // ***********************************************************************
 
