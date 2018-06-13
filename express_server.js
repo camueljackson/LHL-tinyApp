@@ -25,7 +25,6 @@ app.get('/hello', (req, res) => {
 });
 
 
-
 // HOME
 app.get('/', (req, res) => {
   res.end('Hello!');
@@ -54,24 +53,22 @@ res.redirect('/urls')
 });
 
 
-// UNIQUE URL
+// SHOW URL
 app.get('/urls/:id', (req, res) => {
   let shortURL = req.params.id;
-  let longURL = urlDatabase[shortURL];
+  let longURL =  urlDatabase[req.params.shortURL];
   let templateVars = {
     shortURL: shortURL,
     longURL: longURL
   }
-
   res.render('urls_show', templateVars);
 });
 
 
 // REDIRECT TO LONG URL
 app.get("/u/:shortURL", (req, res) => {
-  let shortURL = req.params.shortURL;
-  let longURL = urlDatabase[shortURL];
-  res.send('OK');
+  let longURL = urlDatabase[req.params.shortURL];
+  res.redirect(301 + longURL);
 });
 
 
