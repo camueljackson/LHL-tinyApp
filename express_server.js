@@ -36,17 +36,21 @@ app.get('/', (req, res) => {
 // LOGIN
 
 app.post('/login', (req, res) => {
-  let username = req.body.username
-  res.cookie('username', username)
-
-  console.log(res.cookie('username', username));
-  res.redirect('/urls');
+  let {username} = req.body;
+  res.cookie("username", username)
+  let templateVars = {
+    username: req.cookies["username"]
+  }
+  res.redirect('/urls').render(templateVars)
 });
 
 
-// DATABASE URLS
+// INDEX URLS
 app.get('/urls', (req, res) => {
-  let templateVars  = {urls: urlDatabase};
+  let templateVars  = {
+    urls: urlDatabase,
+    username: req.cookies["username"]
+  };
   res.render('urls_index', templateVars);
 });
 
