@@ -1,20 +1,20 @@
 <!DOCTYPE html>
 
 <html lang="en">
-  <head>
-<% include ./partials/_header.ejs %>
-  </head>
+<head>
+  <% include ./partials/_header.ejs %>
+</head>
 <body>
 
-<h4>
-ShortURL:    <%= shortURL %>
-</h4>
+  <h4>
+    ShortURL:    <%= shortURL %>
+  </h4>
 
- <form action="/urls/<%=shortURL%>" method="POST"
-      <label for="longURL">Update your URL:</label>
-      <input type="text" value="<%=longURL%>" name="longURL">
-      <input type="submit" value="Update">
-    </form>
+  <form action="/urls/<%=shortURL%>" method="POST"
+    <label for="longURL">Update your URL:</label>
+    <input type="text" value="<%=longURL%>" name="longURL">
+    <input type="submit" value="Update">
+  </form>
 
 </body>
 </html>
