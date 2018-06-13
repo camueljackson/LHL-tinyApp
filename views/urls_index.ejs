@@ -20,20 +20,13 @@
       <% for (let shortUrl in urls) { %>
       <tr>
         <td><%= shortUrl %></td>
-
         <td><%=urls[shortUrl] %></td>
 
         <td><form method="POST"
-          action="/urls/<%=shortUrl %>/delete"
-          inputType='submit'>
-          <input type="submit" value="Delete">
-
+                  action="/urls/<%=shortUrl%>/delete">  <!-- End of first form tag-->
+                  <input type="submit" value="Delete">
         </form>
-
-
-
       </td>
-
     </tr>
     <%}%>
   </tbody>

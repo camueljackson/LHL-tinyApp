@@ -33,13 +33,14 @@ app.get('/urls', (req, res) => {
 
 
 // NEW URLS
-app.get("/urls/new", (req, res) => {
+app.get('/urls/new', (req, res) => {
   res.render("urls_new");
 });
 
 
+
 // POST URLS
-app.post("/urls", (req, res) => {
+app.post('/urls', (req, res) => {
   let shortURL = generateRandomString();
   let longURL = req.body.longURL
   urlDatabase[shortURL] = longURL
@@ -60,7 +61,8 @@ app.get('/urls/:id', (req, res) => {
 
 
 // REDIRECT TO LONG URL
-app.get("/u/:shortURL", (req, res) => {
+app.get('/u/:shortURL', (req, res) => {
+  let shortURL = req.params.id;
   let longURL = urlDatabase[req.params.shortURL];
   let redirect;
   if (!longURL.includes('http')){
@@ -71,6 +73,14 @@ app.get("/u/:shortURL", (req, res) => {
   res.redirect(redirect);
 });
 
+
+// DELETE URL
+app.post('/urls/:id/delete', (req, res) => {
+  let shortURL = req.params.id;
+  delete urlDatabase[shortURL]
+  res.redirect('/urls')
+
+})
 
 // ***********************************************************************
 
