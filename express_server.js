@@ -20,6 +20,23 @@ var urlDatabase   = {
 
 // ***********************************************************************
 
+
+const users = {
+  "userRandomID": {
+    id: "userRandomID",
+    email: "user@example.com",
+    password: "purple-monkey-dinosaur"
+  },
+ "user2RandomID": {
+    id: "user2RandomID",
+    email: "user2@example.com",
+    password: "dishwasher-funk"
+  }
+}
+
+
+// ***********************************************************************
+
 function generateRandomString() {
   return Math.floor((1 + Math.random()) * 0x1000000).toString(16).substring(1);
 }
@@ -40,8 +57,15 @@ app.post('/login', (req, res) => {
 app.post('/logout', (req, res) => {
   let username = req.body.username;
   res.clearCookie("username", username);
-  res.redirect('/urls')
+  res.redirect('urls')
 })
+
+
+// REGISTER
+app.get('/register', (req, res) => {
+
+  res.render('register');
+});
 
 
 // HOME
