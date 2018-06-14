@@ -32,7 +32,7 @@ const users = {
     email: "user2@example.com",
     password: "dishwasher-funk"
   }
-}
+};
 
 
 // ***********************************************************************
@@ -63,8 +63,25 @@ app.post('/logout', (req, res) => {
 
 // REGISTER
 app.get('/register', (req, res) => {
-
   res.render('register');
+});
+
+
+// POST REGISTER
+app.post('/register', (req, res) => {
+let user_id = generateRandomString();
+let email = req.body.email;
+let password = req.body.password;
+users[user_id] = user_id;
+users[user_id].email = email;
+users[user_id].password = password;
+
+res.cookie("user_id", user_id)
+
+console.log(res.cookie("user_id", user_id))
+
+
+  res.redirect('urls');
 });
 
 
