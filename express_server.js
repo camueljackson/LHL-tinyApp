@@ -69,14 +69,6 @@ app.get('/register', (req, res) => {
 
 // POST REGISTER
 app.post('/register', (req, res) => {
-  let user_id = generateRandomString();
-
-  users[user_id] = {
-    id: user_id,
-    email: req.body.email,
-    password: req.body.password
-  };
-
   if (!req.body.email) {
     res.status(400).send('Please enter an email');
   } else if (!req.body.password) {
@@ -85,14 +77,22 @@ app.post('/register', (req, res) => {
       for (let user in users) { //access DB
         if (req.body.email === users[user].email) {
           res.status(400).send('email in use')
+        } else {
+          let user_id = generateRandomString();
+          users[user_id] = {
+            id: user_id,
+            email: req.body.email,
+            password: req.body.password
+          };
+
+          res.cookie("user_id", users[user_id]);
+
+
+
         }
-      } // FOR LOOP
-  res.cookie("user_id", users[user_id]);
-  res.redirect('urls')
-
- }
-
-
+      }
+    }
+res.redirect('urls')
 }); // end of register
 
 
