@@ -27,7 +27,7 @@ const users = {
     email: "user@example.com",
     password: "purple-monkey-dinosaur"
   },
- "user2RandomID": {
+  "user2RandomID": {
     id: "user2RandomID",
     email: "user2@example.com",
     password: "dishwasher-funk"
@@ -69,18 +69,31 @@ app.get('/register', (req, res) => {
 
 // POST REGISTER
 app.post('/register', (req, res) => {
-let user_id = generateRandomString();
+  let user_id = generateRandomString();
 
-users[user_id] = {
-  id: user_id,
-  email: req.body.email,
-  password: req.body.password
-};
+  users[user_id] = {
+    id: user_id,
+    email: req.body.email,
+    password: req.body.password
+  };
 
-res.cookie("user_id", users[user_id]);
+  if (!req.body.email) {
+    res.status(400).send('Please enter an email');
+  } else if (!req.body.password) {
+    res.status(400).send('Please enter a password');
+ } else {
+      for (let user in users) { //access DB
+        if (req.body.email === users[user].email) {
+          res.status(400).send('email in use')
+        }
+      } // FOR LOOP
+  res.cookie("user_id", users[user_id]);
+  res.redirect('urls')
 
-  res.redirect('urls');
-});
+ }
+
+
+}); // end of register
 
 
 // HOME
