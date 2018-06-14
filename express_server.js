@@ -44,12 +44,21 @@ function generateRandomString() {
 // ***********************************************************************
 
 
-// LOGIN
+//LOGIN
+app.get('/login', (req, res) => {
+  let templateVars = {
+    username: req.body.username,
+    password: req.body.password
+  }
+  res.render('login', templateVars);
+});
 
+
+// POST TO LOGIN
 app.post('/login', (req, res) => {
   let {username} = req.body;
   res.cookie("username", username)
-  res.redirect('/urls');
+  res.redirect('urls');
 });
 
 
@@ -182,12 +191,3 @@ app.post('/urls/:id/delete', (req, res) => {
 app.listen(PORT, () => {
   console.log(`Example app listening on port ${PORT}!`);
 });
-
-
-
-
-
-
-
-
-

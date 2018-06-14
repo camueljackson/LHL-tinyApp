@@ -5,30 +5,21 @@
 
 <body>
 
+<h3>WELCOME TO TINY APP!</h3>
 
-
-  <br>
-  <br>
-
-  <% if (!username) {%>
-
-  <h4 id=greeting> Welcome to TinyApp </h4>
-  <hr width='viewport'>
-  <form action="/login" method="POST">
-    <label for="longURL">Please log in:</label>
-    <input type="text" name="username" placeholder="username"> <br>
-    <input type="submit" value="Login">
+<% if (!username) { %>
+ <a href="/login/">Please log in </a>
   </form>
 
-
-  <%} else {%>
-  <h1>Welcome back, <%=username%></h1>
+<% } else { %>
+  <h5>Logged in</h5>
 
   <form action="/logout" method="POST">
     <input type="submit" value="Logout" name='username'>
   </form>
+<%}%>
 
-
-  <% } %>
+  <br>
+  <br>
 
 </body>
