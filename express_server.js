@@ -32,10 +32,7 @@ function generateRandomString() {
 app.post('/login', (req, res) => {
   let {username} = req.body;
   res.cookie("username", username)
-  let templateVars = {
-    username: req.cookies["username"]
-  }
-  res.redirect('/urls').render(templateVars)
+  res.redirect('/urls');
 });
 
 
@@ -111,15 +108,12 @@ app.get('/u/:shortURL', (req, res) => {
   let shortURL  = req.params.id;
   let longURL   = urlDatabase[req.params.shortURL];
   let redirect;
-  let templateVars = {
-    username: req.cookies["username"]
-  }
   if (!longURL.includes('http')){
     redirect = 'http://' + urlDatabase[req.params.shortURL];
   } else {
     redirect = urlDatabase[req.params.shortURL];
   };
-  res.redirect(redirect).render(templateVars)
+  res.redirect(redirect)
 });
 
 

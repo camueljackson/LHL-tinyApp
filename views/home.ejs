@@ -1,10 +1,17 @@
 <html lang="en">
   <head>
+
+    <% include partials/_header %>
+
   </head>
   <body>
 
-    <a href="urls/new">Shorten your URL </a>
+    <% if (username) { %>
 
+    <a href="urls/new">Shorten your URL </a>
+  <% } else { %>
+Log in to see your shorten URLs!
+<%} %>
 
 </body>
 </html>
