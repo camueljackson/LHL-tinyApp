@@ -5,18 +5,17 @@
   <% include ./partials/_header.ejs %>
 </head>
 
-<% if (!username) { %>
+<% if (!user) { %>
 
   <form action="/login" method="POST">
     <br>
-    <input type="text" name="username" placeholder="username"> <br>
+    <input type="text" name="email" placeholder="username"> <br>
     <input type="text" name="password" placeholder="password"> <br>
     <input type="submit" value="Login">
   </form>
 
 <% } else { %>
-
-  Welcome, <%=username%>
+  Welcome, <%=user.email%>
 <%}%>
 
 
