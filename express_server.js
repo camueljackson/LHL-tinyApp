@@ -80,8 +80,9 @@ app.post('/login', (req, res) => {
 
 // LOGOUT
 app.post('/logout', (req, res) => {
-  req.cookies['user_id', user_id];
-  res.clearCookie("user_id", user_id);
+  let user = users[req.cookies['user_id']]
+  req.cookies['user_id'];
+  res.clearCookie("user_id");
   res.redirect('urls')
 })
 

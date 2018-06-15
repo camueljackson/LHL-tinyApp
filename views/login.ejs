@@ -16,6 +16,9 @@
 
 <% } else { %>
   Welcome, <%=user.email%>
+  <form action="/logout" method="POST">
+    <input type="submit" value="Logout" name='user_id'>
+  </form>
 <%}%>
 
 
