@@ -14,8 +14,14 @@ app.set('view engine', 'ejs');
 // ***********************************************************************
 
 var urlDatabase   = {
-  "b2xVn2": "http://www.lighthouselabs.ca",
-  "9sm5xK": "http://www.google.com"
+  "b2xVn2" : {
+    longURL: "http://www.lighthouselabs.ca",
+    userID: "userRandomID"
+  },
+  "9sm5xK": {
+    longURL: "http://www.google.com",
+    userID: "userRandomID"
+  }
 };
 
 // ***********************************************************************
@@ -142,7 +148,11 @@ app.get('/urls', (req, res) => {
 app.post('/urls', (req, res) => {
   let shortURL  = generateRandomString();
   let longURL   = req.body.longURL
-  urlDatabase[shortURL] = longURL
+  urlDatabase[shortURL] = {
+    longURL: longURL,
+    userID: req.cookies.user_id
+  };
+  console.log('OOOTHER', urlDatabase)
   res.redirect('/urls');
 });
 
@@ -160,7 +170,9 @@ app.get('/urls/new', (req, res) => {
 app.post('/urls/:id', (req, res) => {
   let shortURL  = req.params.id;
   let longURL   = req.body.longURL;
-  urlDatabase[shortURL] = longURL;
+  urlDatabase[shortURL].longURL = longURL;
+
+  console.log('HEEEERE', urlDatabase)
   res.redirect('/urls');
 });
 
@@ -168,7 +180,7 @@ app.post('/urls/:id', (req, res) => {
 // SHOW URL
 app.get('/urls/:id', (req, res) => {
   let shortURL  = req.params.id;
-  let longURL   =  urlDatabase[shortURL];
+  let longURL   =  urlDatabase[shortURL].longURL;
   let templateVars = {
     shortURL: shortURL,
     longURL: longURL,
