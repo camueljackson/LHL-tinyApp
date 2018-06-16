@@ -19,7 +19,7 @@
       </tr>
     </thead>
     <tbody>
-      <% if (!user) { %>
+      <% if (user) { %>
       <% for (let shortUrl in urls) { %>
       <tr>
         <td><%= shortUrl %></td>
