@@ -176,18 +176,22 @@ if (!req.cookies['user_id']) {
 
 // INDEX URLS
 app.get('/urls', (req, res) => {
-  if (req.cookies['user_id']) {
-  let userID = users[req.cookies['user_id']].id;
-  let filterUrls = urlsForUser(userID);
-  let templateVars  = {
-    urls: filterUrls,
-    userID: users[req.cookies['user_id']].id,
-    user: users[req.cookies['user_id']]
-  };
-  res.render('urls_index', templateVars);
-  } else {
-    res.redirect('login')
+  let templateVars = {
+    userID: '',
+      user: ''
   }
+  if (!req.cookies['user_id']) {
+    res.render('login', templateVars);
+
+    } else {
+      console.log(req.cookies['user_id']);
+
+       templateVars = {
+        user: users[req.cookies['user_id']],
+        userID: req.cookies['user_id']
+        }
+      res.render('urls_index', templateVars);
+    }
 });
 
 
