@@ -6,19 +6,19 @@
 <body>
 <h4 id=greeting> Welcome to TinyApp </h4>
 
-  <% if (user) {%>
+  <% if (!userID) {%>
 
-  <h1>Welcome back, <%=user.email%></h1>
-  <form action="/logout" method="POST">
-    <input type="submit" value="Logout" name='user_id'>
-  </form>
-
-
-
-  <%} else {%>
 <a href="/register/">Register today!</a>
   <br>
   <a href="/login/">Already a user? Please log in:</a>
+
+<h1>Welcome back <%=userID%></h1>
+  <form action="/logout" method="POST">
+    <input type="submit" value="Logout" name='user_id'>
+    </form>
+
+  <%} else {%>
+
 
 
   <% } %>

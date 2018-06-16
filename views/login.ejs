@@ -5,7 +5,7 @@
   <% include ./partials/_header.ejs %>
 </head>
 
-<% if (!user) { %>
+<% if (!userID) { %>
 
   <form action="/login" method="POST">
     <br>
@@ -15,7 +15,7 @@
   </form>
 
 <% } else { %>
-  Welcome, <%=user.email%>
+  Welcome, <%=userID%>
   <form action="/logout" method="POST">
     <input type="submit" value="Logout" name='user_id'>
   </form>

@@ -56,12 +56,25 @@ function findUser(email) {
   }
 }
 
+function urlsForUser(userID) {
+  let returnObj = {};
+
+  for (const shortURL in urlDatabase) {
+    if (userID === urlDatabase[shortURL].userID) {
+      returnObj[shortURL] = urlDatabase[shortURL]
+    }
+  }
+  return returnObj;
+}
+
+
 // ***********************************************************************
 
 
 //LOGIN
 app.get('/login', (req, res) => {
   let templateVars = {
+     userID: users[req.cookies.id],
      user: users[req.cookies['user_id']]
     }
   res.render('login', templateVars);
@@ -117,7 +130,7 @@ app.post('/register', (req, res) => {
               email: req.body.email,
               password: req.body.password
           }
-          res.cookie("user_id", users[user_id].id);
+          res.cookie("user_id", users[user_id]);
         }
       }
     }
@@ -128,6 +141,7 @@ res.redirect('urls')
 // HOME
 app.get('/', (req, res) => {
   let templateVars = {
+    userID: users[req.cookies.id],
     user: users[req.cookies['user_id']]
   }
   res.render('home', templateVars)
@@ -136,8 +150,13 @@ app.get('/', (req, res) => {
 
 // INDEX URLS
 app.get('/urls', (req, res) => {
+  let userID = users[req.cookies.id];
+
+  let filterUrls = urlsForUser(userID);
+
   let templateVars  = {
-    urls: urlDatabase,
+    urls: filterUrls,
+    userID: users[req.cookies.id],
     user: users[req.cookies['user_id']]
   };
   res.render('urls_index', templateVars);
@@ -150,16 +169,19 @@ app.post('/urls', (req, res) => {
   let longURL   = req.body.longURL
   urlDatabase[shortURL] = {
     longURL: longURL,
-    userID: req.cookies.user_id
+    userID: users[req.cookies.id]
   };
-  console.log('OOOTHER', urlDatabase)
   res.redirect('/urls');
 });
 
 
 // NEW URLS
 app.get('/urls/new', (req, res) => {
+  let userID = users[req.cookies.id]
+  urlsForUser(userID)
+
   let templateVars = {
+    userID: users[req.cookies.id],
     user: users[req.cookies['user_id']]
   }
   res.render("urls_new", templateVars);
@@ -170,21 +192,35 @@ app.get('/urls/new', (req, res) => {
 app.post('/urls/:id', (req, res) => {
   let shortURL  = req.params.id;
   let longURL   = req.body.longURL;
-  urlDatabase[shortURL].longURL = longURL;
+  //urlDatabase[shortURL].longURL = longURL;
+  let userID = users[req.cookies.id];
+  let user = users[req.cookies['user_id']]
 
-  console.log('HEEEERE', urlDatabase)
-  res.redirect('/urls');
+   if (userID ===  urlDatabase[shortURL].userID) {
+      urlDatabase[shortURL] = {
+        longURL: longURL
+      }
+        res.redirect('/urls')
+    } else {
+      res.send(403, 'Cannot UPDATE')
+    }
 });
 
 
 // SHOW URL
 app.get('/urls/:id', (req, res) => {
+  let userID = users[req.cookies.id];
+  let user = users[req.cookies['user_id']]
+  urlsForUser(userID)
+
+
   let shortURL  = req.params.id;
   let longURL   =  urlDatabase[shortURL].longURL;
   let templateVars = {
     shortURL: shortURL,
     longURL: longURL,
-    user: users[req.cookies['user_id']]
+    userID: userID,
+    user: user
   };
   res.render('urls_show', templateVars);
 });
@@ -207,8 +243,14 @@ app.get('/u/:shortURL', (req, res) => {
 // DELETE URL
 app.post('/urls/:id/delete', (req, res) => {
   let shortURL  = req.params.id;
-  delete urlDatabase[shortURL]
-  res.redirect('/urls')
+  let userID = users[req.cookies.id];
+
+  if (userID ===  urlDatabase[shortURL].userID) {
+    delete urlDatabase[shortURL]
+    res.redirect('/urls')
+  } else {
+    res.send(403, 'Cannot delete')
+  }
 });
 
 
