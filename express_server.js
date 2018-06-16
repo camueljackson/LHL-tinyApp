@@ -84,6 +84,7 @@ app.post('/login', (req, res) => {
   if (user) {
     if ((user.email === email) && (bcrypt.compareSync(password, user.password))) {
       res.cookie('user_id', user.id);
+      console.log('COOOOOKIE, ', res.cookie('user_id', user.id));
       res.redirect('urls');
     } else {
       res.send('Incorrect password!');
@@ -166,7 +167,7 @@ if (!req.cookies['user_id']) {
 
   } else {
      templateVars = {
-      userID: users[req.cookies['user_id']].id,
+      userID: [req.cookies['user_id']].id,
       user: users[req.cookies['user_id']]
       }
     res.render('home', templateVars);
@@ -176,8 +177,6 @@ if (!req.cookies['user_id']) {
 
 // INDEX URLS
 app.get('/urls', (req, res) => {
-
-
   let templateVars = {
     userID: '',
       user: ''
@@ -186,8 +185,9 @@ app.get('/urls', (req, res) => {
     res.render('login', templateVars);
 
     } else {
-      let userID = req.cookies['user_id'].id;
-      let filterUrls = urlsForUser(userID.id);
+      let userID = [req.cookies['user_id']].id
+      console.log('UUUUSER', userID)
+      let filterUrls = urlsForUser(userID);
        templateVars = {
         urls: filterUrls,
         user: users[req.cookies['user_id']],
@@ -212,14 +212,29 @@ app.post('/urls', (req, res) => {
 
 // NEW URLS
 app.get('/urls/new', (req, res) => {
-  let userID = users[req.cookies.id]
-  urlsForUser(userID)
-
-  let templateVars = {
-    userID: users[req.cookies.id],
-    user: users[req.cookies['user_id']]
+let templateVars = {
+    userID: '',
+      user: ''
   }
-  res.render("urls_new", templateVars);
+  if (!req.cookies['user_id']) {
+    res.render('login', templateVars);
+
+    } else {
+      let userID = req.cookies['user_id'];
+      console.log('UUUUSER', userID)
+
+
+      let filterUrls = urlsForUser(userID);
+       templateVars = {
+        urls: filterUrls,
+        user: users[req.cookies['user_id']],
+        userID: req.cookies['user_id']
+        }
+      res.render('urls_new', templateVars);
+    }
+
+
+
 });
 
 
