@@ -4,18 +4,19 @@
 </head>
 
 <body>
-<h4 id=greeting> Welcome to TinyApp </h4>
+  <h4 id=greeting> Welcome to TinyApp </h4>
 
   <% if (!userID) {%>
 
-<a href="/register/">Register today!</a>
+  <a href="/register/">Register today!</a>
   <br>
   <a href="/login/">Already a user? Please log in:</a>
 
-<h1>Welcome back <%=userID%></h1>
+  <h1>Welcome back <%=userID%></h1>
+
   <form action="/logout" method="POST">
     <input type="submit" value="Logout" name='user_id'>
-    </form>
+  </form>
 
   <%} else {%>
 
