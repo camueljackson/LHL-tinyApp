@@ -84,7 +84,6 @@ app.post('/login', (req, res) => {
   if (user) {
     if ((user.email === email) && (bcrypt.compareSync(password, user.password))) {
       res.cookie('user_id', user.id);
-      console.log('COOOOOKIE, ', res.cookie('user_id', user.id));
       res.redirect('urls');
     } else {
       res.send('Incorrect password!');
@@ -106,7 +105,7 @@ if (!req.cookies['user_id']) {
 
   } else {
      templateVars = {
-      userID: users[req.cookies['user_id']].id,
+      userID: [req.cookies['user_id']].id,
       user: users[req.cookies['user_id']]
       }
     res.render('login', templateVars);
@@ -191,7 +190,7 @@ app.get('/urls', (req, res) => {
        templateVars = {
         urls: filterUrls,
         user: users[req.cookies['user_id']],
-        userID: req.cookies['user_id']
+        userID: [req.cookies['user_id']].id
         }
       res.render('urls_index', templateVars);
     }
@@ -204,7 +203,7 @@ app.post('/urls', (req, res) => {
   let longURL   = req.body.longURL
   urlDatabase[shortURL] = {
     longURL: longURL,
-    userID: users[req.cookies.id]
+    userID: [req.cookies['user_id']].id
   };
   res.redirect('/urls');
 });
@@ -228,7 +227,7 @@ let templateVars = {
        templateVars = {
         urls: filterUrls,
         user: users[req.cookies['user_id']],
-        userID: req.cookies['user_id']
+        userID: [req.cookies['user_id']].id
         }
       res.render('urls_new', templateVars);
     }
