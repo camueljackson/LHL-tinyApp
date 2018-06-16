@@ -3,13 +3,16 @@ const app           =   express();
 const bodyParser    =   require("body-parser");
 const cookieParser  =   require('cookie-parser');
 const PORT          =   8080;
-
+const bcrypt        =   require('bcryptjs');
 
 // ***********************************************************************
 
 app.use(cookieParser())
 app.use(bodyParser.urlencoded({extended: true}));
 app.set('view engine', 'ejs');
+
+
+
 
 // ***********************************************************************
 
@@ -31,12 +34,12 @@ const users = {
   "userRandomID": {
     id: "userRandomID",
     email: "user@example.com",
-    password: "purple-monkey-dinosaur"
+    password: bcrypt.hashSync("purple-monkey-dinosaur", 10)
   },
   "user2RandomID": {
     id: "user2RandomID",
     email: "user2@example.com",
-    password: "dishwasher-funk"
+    password: bcrypt.hashSync("dishwasher-funk", 10)
   }
 };
 
@@ -84,10 +87,11 @@ app.get('/login', (req, res) => {
 // POST TO LOGIN
 app.post('/login', (req, res) => {
   email     = req.body.email;
-  password  = req.body.password;
+  password  = bcrypt.hashSync(req.body.password, 10);
+
   let user  = findUser(email);
   if (user) {
-    if (email === user.email) {
+    if (email === user.email) && (bcrypt.compareSync(password, user.password)) {
     res.cookie('user_id', user.id)
     }
   } else {
@@ -128,7 +132,7 @@ app.post('/register', (req, res) => {
               users[user_id] = {
               id: user_id,
               email: req.body.email,
-              password: req.body.password
+              password: bcryptjs.hashSync(req.body.password, 10)
           }
           res.cookie("user_id", users[user_id]);
         }
