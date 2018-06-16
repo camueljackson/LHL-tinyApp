@@ -176,6 +176,8 @@ if (!req.cookies['user_id']) {
 
 // INDEX URLS
 app.get('/urls', (req, res) => {
+
+
   let templateVars = {
     userID: '',
       user: ''
@@ -184,9 +186,10 @@ app.get('/urls', (req, res) => {
     res.render('login', templateVars);
 
     } else {
-      console.log(req.cookies['user_id']);
-
+      let userID = req.cookies['user_id'].id;
+      let filterUrls = urlsForUser(userID.id);
        templateVars = {
+        urls: filterUrls,
         user: users[req.cookies['user_id']],
         userID: req.cookies['user_id']
         }
