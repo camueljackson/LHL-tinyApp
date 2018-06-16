@@ -7,6 +7,7 @@
 </head>
 <body>
 
+<% if (user) { %>
 
   <br>
   <br>
@@ -19,7 +20,7 @@
       </tr>
     </thead>
     <tbody>
-      <% if (user) { %>
+
       <% for (let shortUrl in urls) { %>
       <tr>
         <td><%= shortUrl %></td>
