@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+  <% include ./partials/_header.ejs %>
+</head>
+
+<% if (!userID) { %>
+
+  <form action="/login" method="POST">
+    <br>
+    <input type="text" name="email" placeholder="username"> <br>
+    <input type="text" name="password" placeholder="password"> <br>
+    <input type="submit" value="Login">
+  </form>
+
+<% } else { %>
+  Welcome, <%=userID%>
+  <form action="/logout" method="POST">
+    <input type="submit" value="Logout" name='user_id'>
+  </form>
+<%}%>
+
+
+
+
+</body>
+</html>
