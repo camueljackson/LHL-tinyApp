@@ -82,7 +82,6 @@ app.post('/login', (req, res) => {
 
 
   if (user) {
-    console.log('FIRST LEVEL')
     if ((user.email === email) && (bcrypt.compareSync(password, user.password))) {
       res.cookie('user_id', user.id);
       res.redirect('urls');
@@ -97,11 +96,20 @@ app.post('/login', (req, res) => {
 
 //LOGIN
 app.get('/login', (req, res) => {
-  let templateVars = {
-     userID: users[req.cookies.id],
-     user: users[req.cookies['user_id']]
-    }
+let templateVars = {
+  userID: '',
+  user: ''
+}
+if (!req.cookies['user_id']) {
   res.render('login', templateVars);
+
+  } else {
+     templateVars = {
+      userID: users[req.cookies['user_id']].id,
+      user: users[req.cookies['user_id']]
+      }
+    res.render('login', templateVars);
+  }
 });
 
 
@@ -111,7 +119,7 @@ app.post('/logout', (req, res) => {
   let user = users[req.cookies['user_id']]
   req.cookies['user_id'];
   res.clearCookie("user_id");
-  res.redirect('urls')
+  res.redirect('/')
 })
 
 
@@ -149,26 +157,37 @@ res.redirect('urls')
 
 // HOME
 app.get('/', (req, res) => {
-  let templateVars = {
-    userID: users[req.cookies.id],
-    user: users[req.cookies['user_id']]
+let templateVars = {
+  userID: '',
+  user: ''
+}
+if (!req.cookies['user_id']) {
+  res.render('home', templateVars);
+
+  } else {
+     templateVars = {
+      userID: users[req.cookies['user_id']].id,
+      user: users[req.cookies['user_id']]
+      }
+    res.render('home', templateVars);
   }
-  res.render('home', templateVars)
 });
 
 
 // INDEX URLS
 app.get('/urls', (req, res) => {
-  let userID = users[req.cookies.id];
-
+  if (req.cookies['user_id']) {
+  let userID = users[req.cookies['user_id']].id;
   let filterUrls = urlsForUser(userID);
-
   let templateVars  = {
     urls: filterUrls,
-    userID: users[req.cookies.id],
+    userID: users[req.cookies['user_id']].id,
     user: users[req.cookies['user_id']]
   };
   res.render('urls_index', templateVars);
+  } else {
+    res.redirect('login')
+  }
 });
 
 
