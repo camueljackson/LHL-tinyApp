@@ -166,7 +166,7 @@ if (!req.cookies['user_id']) {
 
   } else {
      templateVars = {
-      userID: [req.cookies['user_id']].id,
+      userID: req.cookies['user_id'].id,
       user: users[req.cookies['user_id']]
       }
     res.render('home', templateVars);
@@ -184,13 +184,11 @@ app.get('/urls', (req, res) => {
     res.render('login', templateVars);
 
     } else {
-      let userID = [req.cookies['user_id']].id
-      console.log('UUUUSER', userID)
-      let filterUrls = urlsForUser(userID);
+      let userID = req.cookies['user_id'].id;
        templateVars = {
-        urls: filterUrls,
-        user: users[req.cookies['user_id']],
-        userID: [req.cookies['user_id']].id
+        urls: urlsForUser(userID),
+        user: users[userID],
+        userID: req.cookies['user_id'].id
         }
       res.render('urls_index', templateVars);
     }
@@ -200,10 +198,11 @@ app.get('/urls', (req, res) => {
 // POST URLS
 app.post('/urls', (req, res) => {
   let shortURL  = generateRandomString();
-  let longURL   = req.body.longURL
+  let longURL   = req.body.longURL;
+
   urlDatabase[shortURL] = {
     longURL: longURL,
-    userID: [req.cookies['user_id']].id
+    userID: req.cookies['user_id'].id
   };
   res.redirect('/urls');
 });
@@ -219,41 +218,29 @@ let templateVars = {
     res.render('login', templateVars);
 
     } else {
-      let userID = req.cookies['user_id'];
-      console.log('UUUUSER', userID)
-
-
+      let userID = req.cookies['user_id'].id;
       let filterUrls = urlsForUser(userID);
        templateVars = {
-        urls: filterUrls,
         user: users[req.cookies['user_id']],
-        userID: [req.cookies['user_id']].id
+        userID: req.cookies['user_id'].id
         }
       res.render('urls_new', templateVars);
     }
-
-
-
 });
 
 
 // UPDATE URL (SHOW)
-app.post('/urls/:id', (req, res) => {
-  let shortURL  = req.params.id;
-  let longURL   = req.body.longURL;
-  //urlDatabase[shortURL].longURL = longURL;
-  let userID = users[req.cookies.id];
-  let user = users[req.cookies['user_id']]
 
-   if (userID ===  urlDatabase[shortURL].userID) {
-      urlDatabase[shortURL] = {
-        longURL: longURL
-      }
-        res.redirect('/urls')
-    } else {
-      res.send(403, 'Cannot UPDATE')
-    }
+app.post("/urls/:id", (req, res) => {
+  let {id:shortUrl} = req.params;
+  let longURL = req.body.longURL
+  urlDatabase[shortUrl] = {
+    longURL: longURL,
+    userID: req.cookies['user_id'].id,
+  }
+  res.redirect(301, "/urls");
 });
+
 
 
 // SHOW URL
@@ -292,7 +279,8 @@ app.get('/u/:shortURL', (req, res) => {
 // DELETE URL
 app.post('/urls/:id/delete', (req, res) => {
   let shortURL  = req.params.id;
-  let userID = users[req.cookies.id];
+  let userID = req.cookies['user_id'].id
+
 
   if (userID ===  urlDatabase[shortURL].userID) {
     delete urlDatabase[shortURL]

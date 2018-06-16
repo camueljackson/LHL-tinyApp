@@ -6,7 +6,7 @@
 <body>
   <h1 id=greeting>TinyApp </h1>
 
-  <% if (!user) {%>
+  <% if (!userID) {%>
 
   <a href="/register/">Register today!</a>
   <br>
@@ -14,7 +14,7 @@
 
     <%} else {%>
 
-    <h1>Welcome back, <%=user.id%></h1>
+    <h1>Welcome back, <%=userID%></h1>
 
   <form action="/logout" method="POST">
     <input type="submit" value="Logout" name='user_id'>
