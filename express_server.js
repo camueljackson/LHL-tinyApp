@@ -232,9 +232,10 @@ let templateVars = {
 // UPDATE URL (SHOW)
 
 app.post("/urls/:id", (req, res) => {
-  let {id:shortUrl} = req.params;
+  let id = req.params.id
+  let shortURL = req.params.shortURL
   let longURL = req.body.longURL
-  urlDatabase[shortUrl] = {
+  urlDatabase[shortURL] = {
     longURL: longURL,
     userID: req.cookies['user_id'].id,
   }
