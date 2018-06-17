@@ -1,4 +1,4 @@
-const express       =   require('express');
+ const express       =   require('express');
 const app           =   express();
 const bodyParser    =   require("body-parser");
 const cookieParser  =   require('cookie-parser');
@@ -105,8 +105,8 @@ if (!req.cookies['user_id']) {
 
   } else {
      templateVars = {
-      userID: [req.cookies['user_id']].id,
-      user: users[req.cookies['user_id']]
+      userID: req.cookies['user_id'].id,
+      user: req.cookies['user_id']
       }
     res.render('login', templateVars);
   }
@@ -116,7 +116,7 @@ if (!req.cookies['user_id']) {
 
 // LOGOUT
 app.post('/logout', (req, res) => {
-  let user = users[req.cookies['user_id']]
+  let user = req.cookies['user_id'];
   req.cookies['user_id'];
   res.clearCookie("user_id");
   res.redirect('/')
@@ -167,7 +167,7 @@ if (!req.cookies['user_id']) {
   } else {
      templateVars = {
       userID: req.cookies['user_id'].id,
-      user: users[req.cookies['user_id']]
+      user: req.cookies['user_id']
       }
     res.render('home', templateVars);
   }
@@ -184,11 +184,12 @@ app.get('/urls', (req, res) => {
     res.render('login', templateVars);
 
     } else {
-      let userID = req.cookies['user_id'].id;
+      let userID = req.cookies['user_id'].id
+      let filterUrls = urlsForUser(userID);
        templateVars = {
-        urls: urlsForUser(userID),
-        user: users[userID],
-        userID: req.cookies['user_id'].id
+        urls: filterUrls,
+        userID: req.cookies['user_id'].id,
+        user: req.cookies['user_id']
         }
       res.render('urls_index', templateVars);
     }
@@ -198,11 +199,11 @@ app.get('/urls', (req, res) => {
 // POST URLS
 app.post('/urls', (req, res) => {
   let shortURL  = generateRandomString();
-  let longURL   = req.body.longURL;
-
+  let longURL   = req.body.longURL
   urlDatabase[shortURL] = {
     longURL: longURL,
-    userID: req.cookies['user_id'].id
+    userID: req.cookies['user_id'].id,
+    user: req.cookies['user_id']
   };
   res.redirect('/urls');
 });
@@ -221,33 +222,42 @@ let templateVars = {
       let userID = req.cookies['user_id'].id;
       let filterUrls = urlsForUser(userID);
        templateVars = {
-        user: users[req.cookies['user_id']],
-        userID: req.cookies['user_id'].id
+        urls: filterUrls,
+        userID: req.cookies['user_id'].id,
+        user: req.cookies['user_id']
         }
       res.render('urls_new', templateVars);
     }
+
+
+
 });
 
 
 // UPDATE URL (SHOW)
+app.post('/urls/:id', (req, res) => {
+  let shortURL  = req.params.id;
+  let longURL   = req.body.longURL;
+  let userID = req.cookies['user_id'].id;
+  let user = req.cookies['user_id'];
 
-app.post("/urls/:id", (req, res) => {
-  let id = req.params.id
-  let shortURL = req.params.shortURL
-  let longURL = req.body.longURL
-  urlDatabase[shortURL] = {
-    longURL: longURL,
-    userID: req.cookies['user_id'].id,
-  }
-  res.redirect(301, "/urls");
+   if (userID ===  urlDatabase[shortURL].userID) {
+      urlDatabase[shortURL] = {
+        shortURL: shortURL,
+        longURL: longURL,
+        userID: req.cookies['user_id'].id
+      }
+        res.redirect('/urls')
+    } else {
+      res.send(403, 'Cannot UPDATE')
+    }
 });
-
 
 
 // SHOW URL
 app.get('/urls/:id', (req, res) => {
-  let userID = users[req.cookies.id];
-  let user = users[req.cookies['user_id']]
+  let userID = req.cookies['user_id'].id;
+  let user = req.cookies['user_id'];
   urlsForUser(userID)
 
 
@@ -280,9 +290,7 @@ app.get('/u/:shortURL', (req, res) => {
 // DELETE URL
 app.post('/urls/:id/delete', (req, res) => {
   let shortURL  = req.params.id;
-  let userID = req.cookies['user_id'].id
-
-
+  let userID = req.cookies['user_id'].id;
   if (userID ===  urlDatabase[shortURL].userID) {
     delete urlDatabase[shortURL]
     res.redirect('/urls')
