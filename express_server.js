@@ -46,11 +46,14 @@ const users = {
 
 // ***********************************************************************
 
+
+// Helper function to generate random string, used for creating userIDs upon registration and shortURLs
 function generateRandomString() {
   return Math.floor((1 + Math.random()) * 0x1000000).toString(16).substring(1);
 }
 
 
+// Helper function which loops through users DB and returns the user object associated with the email entered at login
 function findUser(email) {
   for (user in users) {
     if (email === users[user].email) {
@@ -59,6 +62,8 @@ function findUser(email) {
   }
 }
 
+
+// Helper function wwhich loops through the urlDatabase and returns an object containing the urls associated with the used IDs
 function urlsForUser(userID) {
   let returnObj = {};
 
