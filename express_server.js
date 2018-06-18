@@ -17,36 +17,24 @@ app.use(cookieSession({
 
 // ***********************************************************************
 
-
 //URL Database
 var urlDatabase   = {
   "b2xVn2" : {
     longURL: "http://www.lighthouselabs.ca",
-    userID: "userRandomID"
-  },
-  "9sm5xK": {
-    longURL: "http://www.google.com",
     userID: "userRandomID"
   }
 };
 
 // ***********************************************************************
 
-
 //USER Database
 const users = {
-  "userRandomID": {
+  "me@me.ca": {
     id: "userRandomID",
-    email: "user@example.com",
-    password: bcrypt.hashSync("purple-monkey-dinosaur", 10)
-  },
-  "user2RandomID": {
-    id: "user2RandomID",
-    email: "user2@example.com",
-    password: bcrypt.hashSync("dishwasher-funk", 10)
+    email: "me@me.ca",
+    password: bcrypt.hashSync("pass", 10)
   }
 };
-
 
 // ***********************************************************************
 
@@ -236,9 +224,7 @@ app.get('/urls/new', (req, res) => {
     templateVars = {
       urls: filterUrls,
       userID: req.session.user_id.id,
-      user: req.session.user_id,
-      viewtUpdate: req.session.views = (req.session.views || 0) + 1,
-      viewCount: res.end(req.session.views + ' views')
+      user: req.session.user_id
     }
     res.render('urls_new', templateVars);
   }
@@ -286,13 +272,14 @@ app.get('/urls/:id', (req, res) => {
 // REDIRECT TO LONG URL
 app.get('/u/:shortURL', (req, res) => {
   let shortURL  = req.params.id;
-  let longURL   = urlDatabase[req.params.shortURL];
+  let longURL   = urlDatabase[req.params.shortURL].longURL;
   let redirect;
   // Making sure the URL can be accessed with our without the user adding 'HTTP' to their URL
-  if (!longURL.includes('http')){
-    redirect = 'http://' + urlDatabase[req.params.shortURL];
+  if (!longURL.includes('http')) {
+    console.log('TESSST. ', 'http://' + urlDatabase[req.params.shortURL].longURL)
+    redirect = 'http://' + longURL;
   } else {
-    redirect = urlDatabase[req.params.shortURL];
+    redirect = longURL;
   };
   res.redirect(redirect)
 });
