@@ -4,7 +4,7 @@
     <% include partials/_header %>
 
     <% if (!user) { %>
-    <a href='/login/'>Please log in to shorten your URLs </a>
+    <a id='newURL' href='/login/'>Please log in to shorten your URLs </a>
   <% } else {%>
   <form action="/urls/" method="POST" style="margin:150px;">
       <label for="longURL">Enter a URL:</label>

@@ -99,14 +99,14 @@ app.get('/login', (req, res) => {
   }
 // if no session, render login page with _header showing the login details
 if (!req.session.user_id) {
-  res.render('login', templateVars);
+  res.render('urls_login', templateVars);
 // if SESSION, _header shows "welcome, user.email"
 } else {
  templateVars = {
   userID: req.session.user_id.id,
   user: req.session.user_id,
 }
-res.render('login', templateVars);
+res.render('urls_login', templateVars);
 }
 });
 
@@ -121,7 +121,7 @@ app.post('/logout', (req, res) => {
 
 // REGISTER
 app.get('/register', (req, res) => {
-  res.render('register');
+  res.render('urls_register');
 });
 
 
@@ -160,13 +160,13 @@ app.get('/', (req, res) => {
     user: ''
   }
   if (!req.session.user_id) {
-    res.render('home', templateVars);
+    res.render('urls_home', templateVars);
   } else {
    templateVars = {
     userID: req.session.user_id.id,
     user: req.session.user_id
   }
-  res.render('home', templateVars);
+  res.render('urls_home', templateVars);
 }
 });
 
@@ -180,7 +180,7 @@ app.get('/urls', (req, res) => {
   }
 // If visitor not logged in, redirect to login page.  If logged in -> show that user's URL DB
   if (!req.session.user_id) {
-    res.render('login', templateVars);
+    res.render('urls_login', templateVars);
   } else {
     let userID = req.session.user_id.id;
 // Using urlsForUser function to return the userID's urlDB object (and therefore associated URLs)
@@ -224,7 +224,7 @@ app.get('/urls/new', (req, res) => {
     templateVars = {
       urls: filterUrls,
       userID: req.session.user_id.id,
-      user: req.session.user_id
+      user: req.session.user_id,
     }
     res.render('urls_new', templateVars);
   }
@@ -256,7 +256,7 @@ app.post('/urls/:id', (req, res) => {
 app.get('/urls/:id', (req, res) => {
   let userID = req.session.user_id.id;
   let user = req.session.user_id;
-  urlsForUser(userID)
+  urlsForUser(user)
   let shortURL  = req.params.id;
   let longURL   =  urlDatabase[shortURL].longURL;
   let templateVars = {
@@ -276,7 +276,6 @@ app.get('/u/:shortURL', (req, res) => {
   let redirect;
   // Making sure the URL can be accessed with our without the user adding 'HTTP' to their URL
   if (!longURL.includes('http')) {
-    console.log('TESSST. ', 'http://' + urlDatabase[req.params.shortURL].longURL)
     redirect = 'http://' + longURL;
   } else {
     redirect = longURL;
