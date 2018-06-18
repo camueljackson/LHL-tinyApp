@@ -30,7 +30,7 @@ var urlDatabase   = {
 //USER Database
 const users = {
   "me@me.ca": {
-    id: "userRandomID",
+    id: "me@me.ca",
     email: "me@me.ca",
     password: bcrypt.hashSync("pass", 10)
   }
@@ -79,7 +79,7 @@ app.post('/login', (req, res) => {
 // Uses the findUser helper function, creating 'user' object to check against req.body. If user exists and credentials match, initiate cookie session.
 if (user) {
     if ((user.email === email) && (bcrypt.compareSync(password, user.password))) {   // checking if user DB email matches the req.body email, and comapres hashed password with req.body hashed PW
-      req.session.user_id = user.id;
+      req.session.user_id = user;
       res.redirect('urls');
     } else {
       res.send('Incorrect password!');
@@ -104,7 +104,7 @@ if (!req.session.user_id) {
 } else {
  templateVars = {
   userID: req.session.user_id.id,
-  user: req.session.user_id
+  user: req.session.user_id,
 }
 res.render('login', templateVars);
 }
